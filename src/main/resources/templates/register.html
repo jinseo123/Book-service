@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join</title>
+    <style>
+        table {
+            width: 500px; /* 테이블의 전체 너비 */
+            height: 100vh;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        td {
+            width: 100%; /* <td> 요소가 <table>의 너비를 따라가도록 설정 */
+        }
+        .email {
+            width: calc(50% - 20px); /* 비율 기반으로 크기 설정 */
+            height: 36px;
+            font-size: 18px;
+            border: 0;
+            border-color: lightgray;
+            border-radius: 5px;
+            outline: none;
+            padding-left: 10px;
+            background-color: rgb(233,233,233);
+        }
+        .text {
+            margin-top : 10px;
+            width: 90%; /* <td> 너비의 90%를 차지하도록 설정 */
+            height: 36px;
+            font-size: 18px;
+            border: 0;
+            border-radius: 5px;
+            outline: none;
+            padding-left: 10px;
+            background-color: rgb(233,233,233);
+        }
+        select {
+            width: calc(40% - 10px); /* 선택 박스도 비율로 설정 */
+            height: 36px;
+            font-size: 18px;
+            border: 1px solid lightgray;
+            border-radius: 5px;
+            outline: none;
+            padding-left: 10px;
+        }
+        .btn {
+            width: 95%; /* 버튼도 90% 너비로 설정 */
+            height: 40px;
+            color: #fff;
+            font-size: 16px;
+            border: 0;
+            border-radius: 5px;
+            outline: none;
+            margin-top : 10px;
+            background-color: #6A24FE;
+        }
+        .btn:active {
+            background-color: rgb(61, 135, 255);
+        }
+    </style>
+</head>
+<body>
+<form action="login.html">
+    <table>
+        <tr>
+            <td><h2>회원가입</h2></td>
+        </tr>
+        <tr><td>아이디</td></tr>
+        <tr><td><input type="text" class="text"></td></tr>
+        <tr><td>비밀번호</td></tr>
+        <tr><td><input type="password" class="text"></td></tr>
+        <tr><td>비밀번호 확인</td></tr>
+        <tr><td><input type="password" class="text"></td></tr>
+        <tr><td>이름</td></tr>
+        <tr><td><input type="text" class="text"></td></tr>
+        <tr><td>이메일</td></tr>
+        <tr>
+            <td>
+                <input type="text" class="email"> @
+                <select>
+                    <option>naver.com</option>
+                    <option>gmail.com</option>
+                    <option>daum.net</option>
+                    <option>nate.com</option>
+                </select>
+            </td>
+        </tr>
+        <tr><td><input type="submit" value="가입하기" class="btn" onclick="alert('가입 성공!')"></td></tr>
+    </table>
+</form>
+</body>
+</html>

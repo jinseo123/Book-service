@@ -15,8 +15,8 @@
             font-family: 'Roboto',sans-serif;
         }
         .login-container{
-            width: 400px;
-            height: 350px;
+            width: 500px;
+            height: 450;
             padding : 40px;
             box-sizing: border-box;
         }
@@ -37,27 +37,89 @@
         #login-form > input[type="submit"]{
             color: #fff;
             font-size: 16px;
+            cursor: pointer;
             background-color: #6A24FE;
             margin-top: 20px;
         }
+        .father-container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .separator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            color: rgba(15, 19, 42, 0.4);
+            font-family: 'Roboto', sans-serif;
+            height: 30px;
+            gap: 10px; /* OR과 선 사이 간격 */
+        }
+
+        .separator .line {
+            flex-grow: 1;
+            height: 1px;
+            background-color: rgba(15, 19, 42, 0.4);
+        }
+
+        .google__btn{
+            display:block;
+            width:100%;
+            max-width:680px;
+            margin:20px auto;
+            height:50px;
+            cursor:pointer;
+            font-size:18px;
+            font-family: 'Montserrat', sans-serif;
+            border-radius:8px;
+            border:none;
+            line-height:40px;
+        }
 
     </style>
-
 </head>
 <body>
-<div class="login-container">
-    <header></header>
-    <h2>로그인</h2>
-    <section>
-        <form method="post" action="" th:action id="login-form">
-            <input type="text" name="userEmail" placeholder="이메일">
-            <input type="password" name="userPassword" placeholder="비밀번호">
-            <label for="remember-check">
-                <input type="checkbox" id="remember-check">아이디 저장하기
-            </label>
-            <input type="submit" value="로그인">
-        </form>
-    </section>
+<div class="father-container">
+    <div class="login-container">
+        <header></header>
+        <h2>로그인</h2>
+        <section>
+            <!--form-->
+            <form method="post" action="" th:action id="login-form">
+                <input type="text" name="userEmail" placeholder="이메일">
+                <input type="password" name="userPassword" placeholder="비밀번호">
+                <label for="remember-check">
+                    <input type="checkbox" id="remember-check">아이디 저장하기
+                </label>
+                <span style="color: rgba(31, 31, 32, 0.712);  margin-left: 15px;">계정이 없으신가요?</span>
+                <span id="signupText" style="cursor: pointer; color: rgba(31, 31, 32, 0.712); text-decoration: underline;">
+                    회원가입
+                </span>
+                <input type="submit" value="로그인">
+            </form>
+            <!--form-->
+        </section>
+
+        <!-- separator -->
+        <div class="separator">
+            <span class="line"></span>
+            <p>OR</p>
+            <span class="line"></span>
+        </div>
+        <!-- google button -->
+        <button class="google__btn">
+            <i class="fa fa-google"></i>
+            Sign in with Google
+        </button>
+        <!-- google button -->
+    </div>
 </div>
 </body>
+<script>
+    document.getElementById("signupText").addEventListener("click", function () {
+        window.location.href = "/auth/register";
+    });
+</script>
 </html>

@@ -23,4 +23,8 @@ public class MainController {
     public String login_get(){
         return "login";
     }
+    @GetMapping("/auth/register")
+    public String register_get(){
+        return "register";
+    }
 }
