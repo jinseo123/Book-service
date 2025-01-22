@@ -2,94 +2,131 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link  th:href="@{/bootstrap.min.css}"
+           href="../../static/bootstrap.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Join</title>
     <style>
         table {
-            width: 500px; /* 테이블의 전체 너비 */
+            width: 400px; /* 테이블의 전체 너비 */
             height: 100vh;
             margin: auto;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        td {
-            width: 100%; /* <td> 요소가 <table>의 너비를 따라가도록 설정 */
+        tbody{
+            width: 90%;
+            display: table;
         }
-        .email {
-            width: calc(50% - 20px); /* 비율 기반으로 크기 설정 */
-            height: 36px;
-            font-size: 18px;
-            border: 0;
-            border-color: lightgray;
-            border-radius: 5px;
-            outline: none;
-            padding-left: 10px;
-            background-color: rgb(233,233,233);
+
+        td > h2{
+            font-size: 24px;
+            font-weight: bold;
+            font-family: 'Roboto', sans-serif;
+            color: rgb(0, 0, 0);
+            margin-bottom: 20px;
+        }
+        td {
+            width: 100%;
+            font-size: 16px;
         }
         .text {
             margin-top : 10px;
+            margin-bottom : 10px;
             width: 90%; /* <td> 너비의 90%를 차지하도록 설정 */
             height: 36px;
-            font-size: 18px;
-            border: 0;
-            border-radius: 5px;
-            outline: none;
-            padding-left: 10px;
-            background-color: rgb(233,233,233);
-        }
-        select {
-            width: calc(40% - 10px); /* 선택 박스도 비율로 설정 */
-            height: 36px;
-            font-size: 18px;
-            border: 1px solid lightgray;
-            border-radius: 5px;
-            outline: none;
-            padding-left: 10px;
-        }
-        .btn {
-            width: 95%; /* 버튼도 90% 너비로 설정 */
-            height: 40px;
-            color: #fff;
             font-size: 16px;
             border: 0;
             border-radius: 5px;
             outline: none;
+            padding: 0 10px;
+            background-color: rgb(233,233,233);
+        }
+        .btn {
             margin-top : 10px;
-            background-color: #6A24FE;
+            width: 90%; /* 버튼도 90% 너비로 설정 */
+            height: 55px;
+            color: #fff;
+            font-size: 20px;
+            border: 0;
+            border-radius: 5px;
+            outline: none;
+            padding: 0 10px;
+            background-color: #243afecc;
         }
-        .btn:active {
-            background-color: rgb(61, 135, 255);
+        .fieldError {
+            width: 90%;
+            color: #D8000C; /* 오류 메시지 텍스트 색 (빨간색) */
+            padding: 1px; /* 여백 */
+            font-size: 14px; /* 글꼴 크기 */
+            margin-top: 0px; /* 상단 여백 */
+            display: block; /* 블록 요소로 표시하여 줄바꿈 */
         }
+        .btn-login-return{
+            border: 0px;
+            margin-left: 1px;
+            background-color: transparent;
+            font-size: 15px;
+            color: #D8000C;
+            cursor: pointer;
+
+        }
+        .already{
+            margin-top: 13px;
+            margin-left: 70px;
+            color: #afafaf;
+            font-size: 15px;
+        }
+
     </style>
 </head>
 <body>
-<form action="login.html">
+<form  th:action="@{/auth/register}" th:object="${userCreateForm}" method="post">
+
+    <!--    <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+            <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+        </div>-->
     <table>
         <tr>
             <td><h2>회원가입</h2></td>
         </tr>
-        <tr><td>아이디</td></tr>
-        <tr><td><input type="text" class="text"></td></tr>
-        <tr><td>비밀번호</td></tr>
-        <tr><td><input type="password" class="text"></td></tr>
-        <tr><td>비밀번호 확인</td></tr>
-        <tr><td><input type="password" class="text"></td></tr>
-        <tr><td>이름</td></tr>
-        <tr><td><input type="text" class="text"></td></tr>
         <tr><td>이메일</td></tr>
         <tr>
             <td>
-                <input type="text" class="email"> @
-                <select>
-                    <option>naver.com</option>
-                    <option>gmail.com</option>
-                    <option>daum.net</option>
-                    <option>nate.com</option>
-                </select>
+                <input type="email" class="text" th:field="*{email}" >
+                <p class="fieldError" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" ></p>
             </td>
         </tr>
-        <tr><td><input type="submit" value="가입하기" class="btn" onclick="alert('가입 성공!')"></td></tr>
+        <tr><td>비밀번호</td></tr>
+        <tr>
+            <td>
+                <input type="password" class="text" th:field="*{password}">
+                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError"></p>
+            </td>
+        </tr>
+        <tr><td>비밀번호 확인</td></tr>
+        <tr>
+            <td>
+                <input type="password" th:field="*{password_check}" class="text">
+                <p th:if="${#fields.hasErrors('password_check')}" th:errors="*{password_check}" class="fieldError"></p>
+            </td>
+        </tr>
+        <tr><td>이름</td></tr>
+        <tr>
+            <td>
+                <input type="text" class="text" th:field="*{nickname}">
+                <p th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}" class="fieldError"></p>
+            </td>
+        </tr>
+        <tr><td><input type="submit" value="가입하기" class="btn" ></td></tr>
+        <tr>
+            <td>
+                <div class="already">이미 가입하셨나요?
+                    <button class="btn-login-return" type="button" onclick="location.href='/auth/login'">로그인</button>
+                </div>
+            <td>
+        </tr>
     </table>
 </form>
 </body>

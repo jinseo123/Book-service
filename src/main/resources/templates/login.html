@@ -22,7 +22,7 @@
         }
         .login-container > h2{
             font-size: 24px;
-            color: rgb(92, 27, 197);
+            color: rgb(0, 0, 0);
             margin-bottom: 20px;
         }
         #login-form > input{
@@ -38,7 +38,7 @@
             color: #fff;
             font-size: 16px;
             cursor: pointer;
-            background-color: #6A24FE;
+            background-color: #1900fdb2;
             margin-top: 20px;
         }
         .father-container{
@@ -88,6 +88,12 @@
         <section>
             <!--form-->
             <form method="post" action="" th:action="@{/auth/login}" id="login-form">
+                <div th:if="${param.error}">
+                    <script>
+                        alert('로그인 에러');
+                    </script>
+                </div>
+
                 <input type="text" name="userEmail" placeholder="이메일">
                 <input type="password" name="userPassword" placeholder="비밀번호">
                 <label for="remember-check">

@@ -37,7 +37,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.3.3'
-
+// 타임리프에서 스프링시큐리티의 문법이나 형식을 지원하는 확장팩 라이브러리
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.3.3'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
