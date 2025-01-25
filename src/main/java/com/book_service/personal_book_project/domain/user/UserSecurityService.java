@@ -21,14 +21,14 @@ public class UserSecurityService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<Users> _user = this.userRepository.findByEmail(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<Users> _user = this.userRepository.findByEmail(username);
         if(_user.isEmpty()){
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
         }
         Users user = _user.get();
         List<GrantedAuthority> authorities = new ArrayList<>();
-        if("kjk0385@naver.com".equals(email)){
+        if("kjk0385@naver.com".equals(username)){
             authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN.getValue())); //일단 관리자
         }
         else {

@@ -1,0 +1,23 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<nav class="navbar" th:fragment="navbar">
+    <ul class="nav-content">
+        <!-- Logo -->
+        <li class="logo">MyWebsite</li>
+
+        <!-- Search Bar -->
+        <form action="/search/result" method="get">
+            <li class="search">
+                <input id="keyword" name="keyword" size=50 type="text" placeholder="Search...">
+                <button type="submit">검색</button>
+            </li>
+        </form>
+
+        <!-- Actions: Login & My Page -->
+        <li class="actions">
+            <button class="login-btn"  onclick="location.href='/auth/login'" sec:authorize="isAnonymous()">로그인</button>
+            <button class="login-btn"  onclick="location.href='/auth/logout'" sec:authorize="isAuthenticated()">로그아웃</button>
+            <button class="register-btn" onclick="location.href='/auth/register'" sec:authorize="isAnonymous()">회원가입</button>
+        </li>
+    </ul>
+</nav>

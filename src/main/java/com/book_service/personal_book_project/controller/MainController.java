@@ -5,12 +5,17 @@ import com.book_service.personal_book_project.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @Slf4j
@@ -49,4 +54,31 @@ public class MainController {
         userService.create(userCreateForm.getNickname(),userCreateForm.getEmail(),userCreateForm.getPassword());
         return "redirect:/"; //메인화면 리다이렉트 회원가입 성공 !
     }
+
+    @GetMapping("/check-anonymous")
+    @ResponseBody
+    public String checkAnonymous() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+            return "현재 사용자는 익명 사용자입니다.";
+        }
+
+        return "현재 사용자는 인증된 사용자입니다: " + authentication.getName();
+    }
+
+    @GetMapping("/login-status")
+    @ResponseBody
+    public String checkLoginStatus() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() &&
+                !(authentication instanceof org.springframework.security.authentication.AnonymousAuthenticationToken)) {
+            return "로그인 성공! 사용자 이름: " + authentication.getName();
+        }
+
+        return "로그인하지 않았습니다.";
+    }
+
+
+
 }

@@ -1,7 +1,6 @@
 package com.book_service.personal_book_project.config;
 
 import lombok.extern.log4j.Log4j2;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -14,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @Log4j2
@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(HttpMethod.GET,"/**","/auth/login","/").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/**","/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST,"/auth/register","/**").permitAll()
                         .requestMatchers("/css/**","/js/**").permitAll()
                         .anyRequest().authenticated()
@@ -46,21 +46,24 @@ public class SecurityConfig {
                 .formLogin(formLogin -> formLogin
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login")
-                        .usernameParameter("userEmail") // username 대신 email필드
-                        .passwordParameter("userPassword")
+                        //.usernameParameter("userEmail") // username 대신 email필드
+                        //.passwordParameter("userPassword")
                         .defaultSuccessUrl("/")
                         .permitAll()
                 )
                 .logout((logout) -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
+                        .logoutSuccessUrl("/auth/login")
                         .invalidateHttpSession(true)
                 )
+                .securityContext(securityContext -> securityContext
+                        .requireExplicitSave(false))
                 .sessionManagement((sessionManagement) -> sessionManagement
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                         .maximumSessions(1)
                         .maxSessionsPreventsLogin(true)
                 );
+
         return http.build();
     }
 

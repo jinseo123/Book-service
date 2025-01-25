@@ -1,0 +1,91 @@
+/* Reset styles */
+body, h1, ul, li, a {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+
+ul{
+    list-style-type: none
+}
+/* Navigation bar styling */
+    /* 네비게이션 바 고정 스타일 */
+    .navbar {
+        position: fixed;  /* 화면 상단에 고정 */
+        top: 0;
+        left: 0;
+        width: 100%;  /* 화면 너비에 맞춤 */
+        padding: 0px 0;
+        z-index: 1000;  /* 다른 요소보다 위에 오도록 설정 */
+    }
+.nav-content{
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+    align-items: center;
+    background: linear-gradient(to right, #fdfdfd, #faf9f8);
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo */
+.nav-content .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: rgb(58, 114, 13);
+}
+
+/* Search Bar */
+.nav-content .search {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    margin: 0 20px;
+}
+
+.nav-content .search input {
+    width: 400px;
+    border: 1px solid;
+    border-color: rgb(58, 114, 13);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 1rem;
+    background-color: white;
+}
+
+/* Right-side actions */
+.nav-content .actions {
+    display: flex;
+    align-items: center;
+}
+
+
+.login-btn{
+    border: 0px;
+    margin-left: 15px;
+    background-color: transparent;
+    font-size: 15px;
+    cursor: pointer;
+    border-color: rgb(215, 216, 214);
+    padding: 5px 15px;
+    border-radius: 7px;
+}
+.register-btn {
+    border: 1px solid;
+    margin-left: 13px;
+    background-color: transparent;
+    font-size: 16px;
+    cursor: pointer;
+    border-color: rgb(215, 216, 214);
+    padding: 5px 15px;
+    border-radius: 7px;
+}
+.register-btn:hover{
+    background-color: rgb(228, 225, 225);
+    color: rgb(0, 0, 0);
+}

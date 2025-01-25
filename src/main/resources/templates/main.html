@@ -1,26 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"><head>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Top Navigation Bar</title>
-    <link rel="stylesheet" th:href="@{/css/main.css}" href="main.css" type="text/css"/>
-</head>
-<nav class="navbar" >
-    <ul class="nav-content">
-        <!-- Logo -->
-        <li class="logo">MyWebsite</li>
+    <link rel="stylesheet" th:href="@{/css/nav.css}" href="nav.css" type="text/css"/></head>
+<div th:replace="~{nav :: navbar}"></div>
 
-        <!-- Search Bar -->
-        <li class="search">
-            <input type="text" placeholder="Search...">
-        </li>
-
-        <!-- Actions: Login & My Page -->
-        <li class="actions">
-            <button class="login-btn"  onclick="location.href='/auth/login'">로그인</button>
-            <button class="register-btn" onclick="location.href='/auth/register'">회원가입</button>
-        </li>
-    </ul>
-</nav>
 </html>
