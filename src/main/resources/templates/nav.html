@@ -3,8 +3,9 @@
 <nav class="navbar" th:fragment="navbar">
     <ul class="nav-content">
         <!-- Logo -->
+        <a th:href="@{|/|}">
         <li class="logo">MyWebsite</li>
-
+        </a>
         <!-- Search Bar -->
         <form action="/search/result" method="get">
             <li class="search">

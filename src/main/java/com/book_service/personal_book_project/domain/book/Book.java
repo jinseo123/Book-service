@@ -1,11 +1,14 @@
 package com.book_service.personal_book_project.domain.book;
 
+import com.book_service.personal_book_project.domain.BookStatus;
 import com.book_service.personal_book_project.domain.user.Users;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Getter
 @Entity
@@ -30,6 +33,10 @@ public class Book {
     private String author;
     @NotNull
     private String publisher;
+    @Enumerated(EnumType.STRING)
+    private BookStatus bookStatus;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     @NotNull
     private Integer isbn;

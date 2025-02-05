@@ -21,11 +21,12 @@ public class SearchService {
 
     private final RestTemplate restTemplate;
 
-    public SearchDto searchBook(String keyword, String queryType,int maxResults){
+    public SearchDto searchBook(String keyword, String queryType,int maxResults,int start){
         String url = String.format(
-          "%s?ttbkey=%s&Query=%s&QueryType=%s&MaxResults=%d&start=1&SearchTarget=Book&Output=js&Version=20131101",
-                baseUrl,ttbKey,keyword,queryType,maxResults
+          "%s?ttbkey=%s&Query=%s&QueryType=%s&MaxResults=%d&start=%d&SearchTarget=Book&Output=js&Version=20131101",
+                baseUrl,ttbKey,keyword,queryType,maxResults, start
         );
+        log.info("****************요청 url : " + url);
         SearchDto searchDto = restTemplate.getForObject(url, SearchDto.class);
         // 이미지 URL을 "big" 크기로 변환
         if (searchDto != null && searchDto.getItem() != null) {

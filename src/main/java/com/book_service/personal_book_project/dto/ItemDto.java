@@ -11,23 +11,22 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SearchDto {
-    public Integer totalResults; //전체 검색 결과
+public class ItemDto {
 
     @JsonProperty("item")
-    List<Book> item = new ArrayList<>();
+    public List<ItemDto.Item> item;  // item을 List로 변경
 
     @Getter
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class Book{
-        public String title;
-        public String cover; //커버이미지
+    public static class Item {
+        private String title;
+        public String cover;
         public String author;
         public String publisher;
-        public String isbn13;
-//        public String description;
+        public String description;
+        public String isbn;
     }
 }

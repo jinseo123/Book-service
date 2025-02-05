@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Navigation Bar</title>
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            margin: 20px;
+            background-color: #fff;
+        }
+
+        .container {
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;  /* 요소들을 세로로 정렬 */
+            align-items: center;
+            background: #f8f8f8;
+        }
+
+        .item-container {
+            width: 80%;
+            margin-top: 130px;
+            margin-bottom: 50px;
+            padding: 20px;
+            background: #f8f8f8;
+            display: flex;
+            align-items: center; /* 요소 세로 정렬 */
+            justify-content: center; /* 중앙 정렬 */
+        }
+
+        .image-container {
+            flex: 0.2;
+            display: flex;
+            margin-right: 20px;
+            justify-content: flex-start;
+        }
+
+        .image-container img {
+            width: 270px;
+            height: 400px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+        }
+
+        .details {
+            flex: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* 내용을 위로 밀고 버튼을 하단에 배치 */
+            max-width: 1000px;
+            height: 400px;
+            gap: 10px;
+        }
+
+        .title {
+            font-family: Roboto, sans-serif;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            font-size: 15px;
+            color: rgb(97, 97, 97);
+        }
+
+        .author-publisher {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            color: rgb(129, 129, 129);
+            margin-right: 10px;
+            padding-bottom: 8px; /* 밑줄과 내용 사이 간격 */
+            border-bottom: 1px solid #ccc; /* 회색 밑줄 */
+        }
+
+        .save-btn {
+            width: 100px;
+            height: 100px;
+            background-color: transparent;  /* 배경 없애기 */
+            border: none;  /* 테두리 없애기 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;  /* 애니메이션 효과 추가 */
+        }
+
+        /* Hover 효과 추가 */
+        .save-btn:hover {
+            transform: scale(1.1);  /* 버튼 크기 확대 */
+            opacity: 0.8;  /* 투명도 조정 */
+        }
+
+        .save-btn:hover img {
+            transform: scale(1.2);  /* 이미지 크기 확대 */
+        }
+
+        .save-btn img {
+            width: 80px; /* 이미지 크기 */
+            height: 80px; /* 이미지 크기 */
+            object-fit: contain; /* 이미지를 버튼에 맞게 조정 */
+        }
+
+        .button-parent {
+            margin-top: auto;  /* 버튼을 아래로 밀어버리는 효과 */
+            align-self: flex-end;  /* 버튼을 하단 오른쪽으로 배치 */
+            text-align: center; /* 버튼을 가로로 중앙 정렬 */
+        }
+
+    </style>
+
+    <link rel="stylesheet" th:href="@{/css/nav.css}" href="nav.css" type="text/css"/>
+</head>
+
+<body>
+<div th:replace="~{nav :: navbar}"></div>
+
+<div class="container">
+    <div class="item-container">
+        <!-- Left side: Image -->
+        <div class="image-container">
+            <img th:src="${item.cover}" alt="책 이미지">
+        </div>
+
+        <!-- Right side: Item Details -->
+        <div class="details">
+            <h1 class="title" th:text="${item.title}">책 제목</h1>
+            <div class="author-publisher">
+                <div class="author" th:text="${item.author}">저자</div>
+                <div class="publisher" th:text="${item.publisher}">출판사</div>
+            </div>
+            <div style="font-weight: bold;">책소개</div>
+            <div class="description" th:text="${item.description}">설명</div>
+
+            <!-- 저장 버튼 추가 -->
+            <div class="button-parent">
+                <button class="save-btn">
+                    <img th:src="@{/img/add.png}" alt="추가이미지">
+                    <span style="font-size: 13px;color: rgb(97, 97, 97);font-family: Roboto, sans-serif;">서재에 저장</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

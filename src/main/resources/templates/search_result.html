@@ -8,7 +8,7 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-            background-color: #f4f4f4;
+            background-color: #fff;
         }
 
         .container {
@@ -16,8 +16,7 @@
             margin: auto;
             padding: 20px;
             background: #fff;
-            //border-radius: 8px;
-            //box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
         }
 
         h1 {
@@ -36,22 +35,23 @@
             flex-direction: column;
             justify-content: flex-start;
             padding: 10px;
-            height: 450px;
-            border: 1px solid #ddd;
+            height: 430px;
+            border: 0px solid #ddd;
             border-radius: 8px;
-            background-color: #f4f4f4;
+            background-color: #fff;
             overflow: hidden;
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .card:hover {
+        .card img:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
 
         .card img {
             width: 100%;
-            height : auto; //비율유지
+            height : 380px;
+            border: 1px solid #ddd;
             border-radius: 8px;
             margin-bottom: 10px;
             object-fit : cover;
@@ -65,36 +65,131 @@
             overflow: hidden; /* 넘치는 텍스트를 숨김 */
             text-overflow: ellipsis; /* 말줄임표 추가 */
             white-space: nowrap; /* 한 줄로 유지 */
-            text-align: center;
             width: 100%; /* 부모 요소의 너비 기준 */
-            margin: 5px 0;
         }
 
-        .card-author, .card-publisher {
-            font-size: 10px;
-            color: #555;
+        .card-details {
+            display: flex;
+            justify-content: center; /* 가운데 정렬 */
+            align-items: center;
+            gap: 5px; /* 요소 간 간격 */
+            width: 90%; /* 부모 요소의 전체 너비 사용 */
+            overflow: hidden;
         }
+
+        .card-author{
+            flex: 1; /* 두 요소가 동일한 너비 차지 */
+            font-size: 13px;
+            color: #555;
+            overflow: hidden;
+            text-overflow: ellipsis; /* 말줄임표(...) 처리 */
+            white-space: nowrap; /* 한 줄 유지 */
+            margin: 1px 0;
+        }
+   /* 페이지 네이션 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+               font-family: 'Helvetica', sans-serif;
+        }
+
+        .pagination ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            gap: 8px;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            padding: 6px 12px;
+            color: #6c757d;  /* 기본 회색 */
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        /* 호버 효과 */
+        .pagination a:hover {
+            color: #495057;  /* 어두운 회색 */
+        }
+
+        /* 활성화된 페이지 */
+        .pagination .active {
+            font-weight: bold;
+            color: #343a40;  /* 진한 회색 */
+            pointer-events: none; /* 클릭 방지 */
+        }
+
+        /* 비활성화된 페이지 */
+        .pagination .disabled {
+            color: #ced4da;  /* 연한 회색 */
+            pointer-events: none; /* 클릭 방지 */
+        }
+
+
+
     </style>
 </head>
 
 <body>
 <div th:replace="~{nav :: navbar}"></div>
 <div class="container">
-    <h1>알라딘 책 검색</h1>
-    <h2>검색 결과</h2>
+    <span style="color: red;"   th:text='| "${query}" |'></span> 의 검색 결과 총 <span style="font-weight: bold;" th:text="${totalResults}"></span> <span>건</span>
     <section>
         <div class="book-cards">
            <!--카드 반복 출력-->
             <div class="card" th:each="book : ${books}">
-                <img th:src="${book.cover}" alt="책이미지" >
+                <a th:href="@{|/item/${book.isbn13}|}">
+                    <img th:src="${book.cover}" alt="책이미지" >
+                </a>
                 <div class="card-title" th:text="${book.title}">제목</div>
-                <div class="card-author" th:text="${book.author}">저자</div>
-                <div class="card-publisher"  th:text="${book.publisher}">출판사</div>
+                <div class="card-details">
+                    <span class="card-author" th:text="${book.author}">저자</span>
+                </div>
             </div>
             <p th:if="${books == null || books.size() == 0}" style="grid-column: span 4; text-align: center;">
                검색 결과가 없습니다.
             </p>
         </div>
+
+        <!-- 페이지네이션 버튼 -->
+        <div class="pagination">
+            <ul class="pagination modal">
+                <!-- 처음 페이지 -->
+                <li><a th:href="@{|/search/result?keyword=${query}&page=1|}" th:classappend="${currentPage == 1} ? 'disabled'" class="first">처음</a></li>
+
+                <!-- << 버튼 (이전 페이지 블록) -->
+                <li class="arrow-left" th:if="${startPage > 1}">
+                    <a th:href="@{|/search/result?keyword=${query}&page=${prevBlockPage}|}"><</a>
+                </li>
+
+                <!-- 이전 -->
+                <li><a th:if="${currentPage > 1}" th:href="@{|/search/result?keyword=${query}&page=${currentPage - 1}|}">이전</a></li>
+
+                <!-- 페이지 번호 표시 (10개씩 고정) -->
+                <li th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                    <a th:href="@{|/search/result?keyword=${query}&page=${i}|}" th:text="${i}"
+                       th:classappend="${i == currentPage} ? 'active' : ''"></a>
+                </li>
+                <!-- 다음 -->
+                <li><a th:if="${currentPage < totalPages}" th:href="@{|/search/result?keyword=${query}&page=${currentPage + 1}|}">다음</a></li>
+
+                <!-- >> 버튼 (다음 페이지 블록) -->
+                <li class="arrow-right" th:if="${endPage < totalPages}">
+                    <a th:href="@{|/search/result?keyword=${query}&page=${nextBlockPage}|}">></a>
+                </li>
+
+                <!-- 마지막 페이지 -->
+                <li><a th:href="@{|/search/result?keyword=${query}&page=${totalPages}|}"
+                   th:classappend="${currentPage == totalPages} ? 'disabled'"
+                       class="last">끝</a></li>
+            </ul>
+        </div>
+
+<!--        <div class="total-results">
+            <p th:text="'총 검색 결과: ' + ${totalResults}">총 검색 결과</p>
+        </div>-->
     </section>
 </div>
 </body>
