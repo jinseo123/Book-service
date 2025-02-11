@@ -78,7 +78,4 @@ public class MainController {
 
         return "로그인하지 않았습니다.";
     }
-
-
-
 }

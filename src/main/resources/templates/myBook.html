@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Navigation Bar</title>
+    <link rel="stylesheet" th:href="@{/css/nav.css}" href="nav.css" type="text/css"/></head>
+<div th:replace="~{nav :: navbar}"></div>
+<title>내 서재</title>
+<style>
+    body {
+      font-family: Roboto, sans-serif;
+      background-color: #fff;
+    }
+    .container {
+      max-width: 100%;
+      margin-top: 10px;
+      background: #fff;
+    }
+    .toggle-btn {
+      display : block;
+      text-align: start;
+      width:100%;
+      background-color: #fff;
+      color: #000000;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      border-bottom: 1px solid #ccc;  /* 회색 밑줄 추가 */
+    }
+    .toggle-btn:hover {
+      background-color: #ddd;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+      margin:10px;
+    }
+
+     .card {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        width:120px;
+        padding: 5px;
+        height: 200px;
+        background-color: #fff;
+        overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
+     }
+    .card img {
+        width: 110px;
+        height : 180px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        object-fit : cover;
+    }
+    .card-title{
+        width:100%;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow : ellipsis;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .total{
+      margin: 15px 10px;
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+</style>
+
+<!-- jQuery CDN (토글 기능을 위해 사용) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="total">  전체 (<span th:text="${#lists.size(bookList)}">0</span>)</div>
+
+    <!-- 읽는중(READING) 섹션 -->
+    <button id="toggleReading" class="toggle-btn">읽는중</button>
+    <div id="readingBooks" style="display:none;" class="card-grid">
+        <!-- Thymeleaf 반복: readingBooks 리스트 -->
+        <div class="card" th:each="book : ${bookList}" th:if="${book.bookStatus == T(com.book_service.personal_book_project.domain.BookStatus).READING}">
+            <!-- 카드 내용 -->
+            <img th:src="${book.cover}" alt="책 표지">
+            <div class="card-title" th:text="${book.title}">제목</div>
+        </div>
+    </div>
+
+    <!-- 다읽었어요(DONE) 섹션 -->
+    <button id="toggleDone" class="toggle-btn">다읽었어요</button>
+    <div id="doneBooks" style="display:none;" class="card-grid">
+        <!-- Thymeleaf 반복: doneBooks 리스트 -->
+        <div class="card" th:each="book : ${bookList}" th:if="${book.bookStatus == T(com.book_service.personal_book_project.domain.BookStatus).DONE}">
+            <!-- 카드 내용 -->
+            <img th:src="${book.cover}" alt="책 표지">
+            <div class="card-title" th:text="${book.title}">제목</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+      $("#toggleReading").click(function(){
+        $("#readingBooks").toggle();
+      });
+      $("#toggleDone").click(function(){
+        $("#doneBooks").toggle();
+      });
+    });
+</script>
+</body>
+</html>

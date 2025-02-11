@@ -1,31 +1,21 @@
-package com.book_service.personal_book_project.domain.book;
+package com.book_service.personal_book_project.dto;
 
 import com.book_service.personal_book_project.domain.BookStatus;
 import com.book_service.personal_book_project.domain.user.Users;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-@Builder
+@ToString
 @Getter
-@Entity
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Book {
-    @Id
-    @Column(name="book_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="id")
-    @NotNull
-    private Users user;
+@Builder
+public class BookDto {
 
     @NotNull
     private String title;
@@ -35,12 +25,16 @@ public class Book {
     private String author;
     @NotNull
     private String publisher;
-    @Enumerated(EnumType.STRING)
+
+    @NotNull
     private BookStatus bookStatus;
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
     @NotNull
     private String isbn;
-
 }

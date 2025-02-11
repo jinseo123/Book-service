@@ -1,14 +1,16 @@
 package com.book_service.personal_book_project.controller;
 
+import com.book_service.personal_book_project.dto.BookDto;
 import com.book_service.personal_book_project.dto.ItemDto;
+import com.book_service.personal_book_project.service.BookService;
 import com.book_service.personal_book_project.service.ItemService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @Slf4j
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class DetailController {
 
     private final ItemService itemService;
+    private final BookService bookService;
 
     @GetMapping("/item/{isbn13}")
     public String ItemDetail(@PathVariable("isbn13") String isbn13, Model model){
@@ -25,5 +28,15 @@ public class DetailController {
 
         model.addAttribute("item", response.getItem().get(0));  // 첫 번째 아이템을 추가
         return "item_detail";
+    }
+    @PostMapping("/item/{isbn13}")
+    public ResponseEntity<String> save_Book(@ModelAttribute BookDto bookDto){
+        log.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Bookdto:" + bookDto);
+        boolean isSaved = bookService.saveBook(bookDto);
+        if(!isSaved){
+            return ResponseEntity.badRequest().body("이미 이 책은 저장되었습니다.");
+        }
+
+        return ResponseEntity.ok("책이 저장되었습니다.");
     }
 }

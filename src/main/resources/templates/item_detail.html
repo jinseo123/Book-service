@@ -1,9 +1,32 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
+    <!-- jQuery CDN 추가 (head 또는 body의 맨 아래에 추가) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Top Navigation Bar</title>
+    <script>
+        function saveBook() {
+            // AJAX 요청을 위한 form 데이터 직렬화
+            let formData = $('#saveBookForm').serialize();
+
+            $.ajax({
+                type: "POST",
+                url: $('#saveBookForm').attr('action'), // 현재 페이지 URL에 맞춰 설정
+                data: formData,
+                success: function(response) {
+                    console.log("책이 저장되었습니다!");
+                    alert(response);
+                    // 필요시, 데이터를 다시 불러오는 로직을 추가할 수도 있습니다.
+                },
+                   error: function (xhr) {
+                    alert(xhr.responseText); // "이미 이 책은 저장되었습니다." 메시지 출력
+                }
+            });
+        }
+    </script>
+
     <style>
         body {
             font-family: Roboto, sans-serif;
@@ -126,6 +149,7 @@
         </div>
 
         <!-- Right side: Item Details -->
+        <form id="saveBookForm" th:action="@{|/item/${item.isbn}|}" method="post">
         <div class="details">
             <h1 class="title" th:text="${item.title}">책 제목</h1>
             <div class="author-publisher">
@@ -135,16 +159,25 @@
             <div style="font-weight: bold;">책소개</div>
             <div class="description" th:text="${item.description}">설명</div>
 
+            <!--BookDto 데이터 저장-->
+            <input type="hidden" th:value="${item.title}" name="title"/>
+            <input type="hidden" th:value="${item.cover}" name="cover"/>
+            <input type="hidden" th:value="${item.author}" name="author"/>
+            <input type="hidden" th:value="${item.publisher}" name="publisher"/>
+            <input type="hidden" value="READING" name="bookStatus"/>
+            <input type="hidden" name="startDate" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"/>
+            <input type="hidden" th:value="${item.isbn}" name="isbn"/>
+
             <!-- 저장 버튼 추가 -->
             <div class="button-parent">
-                <button class="save-btn">
+                <button class="save-btn" type="button" onclick="saveBook()">
                     <img th:src="@{/img/add.png}" alt="추가이미지">
                     <span style="font-size: 13px;color: rgb(97, 97, 97);font-family: Roboto, sans-serif;">서재에 저장</span>
                 </button>
             </div>
         </div>
+        </form>
     </div>
 </div>
-
 </body>
 </html>

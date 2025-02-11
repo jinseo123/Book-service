@@ -13,7 +13,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Users create(String nickname,String email, String password){
+    public Users create(String nickname,String email, String password){ //회원가입
         Users user = new Users();
         user.setEmail(email);
         user.setNickname(nickname);
