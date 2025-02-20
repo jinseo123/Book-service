@@ -21,14 +21,17 @@ public class ItemService {
     @Value("${aladin.item-url}")
     private String itemUrl;
 
+    @Value("${aladin.list-url}")
+    private String listUrl;
+
     private final RestTemplate restTemplate;
 
-    public ItemDto getBookDetail(String isbn13) {
-        log.info(isbn13);
+    public ItemDto getBookDetail(String isbn) {
+        log.info(isbn);
         String url = UriComponentsBuilder.fromHttpUrl(itemUrl)
                 .queryParam("ttbkey", ttbKey)
-                .queryParam("itemIdType","ISBN13")
-                .queryParam("ItemId",isbn13)
+                .queryParam("itemIdType","ISBN")
+                .queryParam("ItemId",isbn)
                 .queryParam("output","js")
                 .queryParam("Version","20131101")
                 .toUriString();
@@ -46,6 +49,24 @@ public class ItemService {
             }
             log.info("아이템 정보: " + item);
         }
+        return response;
+    }
+    public ItemDto getBestseller() {
+        String url = UriComponentsBuilder.fromHttpUrl(listUrl)
+                .queryParam("ttbkey", ttbKey)
+                .queryParam("QueryType","Bestseller")
+                .queryParam("SearchTarget","Book")
+                .queryParam("MaxResults",35)
+                .queryParam("start",1)
+                .queryParam("Cover","Big")
+                .queryParam("output","js")
+                .queryParam("Version","20131101")
+                .toUriString();
+
+        log.info("****************요청 베스트 셀러 url : " + url);
+        ItemDto response = restTemplate.getForObject(url, ItemDto.class);
+        // 이미지 URL을 "big" 크기로 변환
+        log.info("---------------------------------- " +response);
         return response;
     }
 }

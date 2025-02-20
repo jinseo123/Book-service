@@ -25,6 +25,7 @@ public class BookDto {
     private String author;
     @NotNull
     private String publisher;
+    private String description;
 
     @NotNull
     private BookStatus bookStatus;
@@ -35,6 +36,7 @@ public class BookDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
+    private Integer score;
     @NotNull
     private String isbn;
 }

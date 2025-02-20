@@ -36,6 +36,7 @@ public class BookService {
                 .startDate(bookDto.getStartDate())
                 .endDate(bookDto.getEndDate())
                 .isbn(bookDto.getIsbn())
+                .description(bookDto.getDescription())
                 .user(currentUser)
                 .build();
         bookRepository.save(book);

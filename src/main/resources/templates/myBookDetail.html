@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns="http://www.w3.org/1999/html">
+<head>
+    <!-- jQuery CDN 추가 (head 또는 body의 맨 아래에 추가) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/nav.css}" href="nav.css" type="text/css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Navigation Bar</title>
+    <script>
+        $(document).ready(function() {
+            // 책의 별점 값으로 초기화
+            const bookScore = [[${book.score }]]; // 서버에서 가져온 책 점수
+            if (bookScore) {
+                // 해당 별점에 맞는 input을 선택
+                $(`#star${bookScore}`).prop('checked', true);
+            }
+
+            $('.star-rating input').on('change', function() {
+                const rating = $(this).val();
+                console.log(`Selected rating: ${rating}`);
+                const bookId = [[${book.id}]];
+                console.log('bookid: ${bookId}');
+                // AJAX를 사용하여 서버로 데이터 전송
+                $.ajax({
+                    url: '/submit-rating', // 서버의 엔드포인트 URL
+                    type: 'POST',
+                    data: { rating: rating, bookId : bookId },
+                    success: function(response) {
+                        console.log('서버 응답:', response);
+                        // 서버 응답에 따라 추가적인 동작을 수행할 수 있습니다.
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX 요청 실패:', error);
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function() {
+            // 모달 열기
+            $("#openModal").click(function() {
+                $("#memoModal").fadeIn();
+            });
+
+            // 모달 닫기
+            $(".close-btn").click(function() {
+                $("#memoModal").fadeOut();
+            });
+
+            // 저장 버튼 클릭
+            $(".save-btn").click(function() {
+                let memo = $("#memoText").val();
+                const bookId = [[${book.id}]];
+                if (memo.trim() !== "") {
+                    console.log("저장된 메모:", memo); // 콘솔에 출력 (추후 DB 저장 가능)
+                    $.ajax({
+                        url: '/save-memo',
+                        type : 'POST',
+                        data : {
+                            memo : memo,
+                            bookId : bookId
+                        },
+                        dataType: "json",
+                        success : function(response){
+                            console.log('서버 응답:',response);
+                            $('#memoModal').fadeOut();
+                            $('#memoText').val("");//입력값 초기화
+                            //저장된 메모를 화면에 추가
+                            const memoSection = $('.memo-section');
+                            const memoDate = new Date(response.saved).toLocaleDateString();
+                            const memoContent = response.content;
+
+                            const memoHtml = `
+                                <div class="memo-date">
+                                    <div style="font-size:13px; font-weight:bold; color:#ccc;">${memoDate}</div>
+                                    <p>${memoContent}</p>
+                                </div>
+                            `;
+
+                            memoSection.append(memoHtml);
+                        },
+                        error : function(xhr,status,error){
+                            console.error('AJAX 요청 실패 : ',error);
+                            alert('메모 저장에 실패했습니다.');
+                        }
+                    });
+                } else {
+                    alert("메모를 입력하세요!");
+                }
+            });
+
+            // 모달 바깥 클릭 시 닫기
+            $(window).click(function(event) {
+                if (event.target.id === "memoModal") {
+                    $("#memoModal").fadeOut();
+                }
+            });
+        });
+
+    </script>
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            margin: 20px;
+            background-color: #fff;
+        }
+
+        .container {
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;  /* 요소들을 세로로 정렬 */
+            align-items: center;
+            background: #f8f8f8;
+        }
+
+        .item-container {
+            order:2;
+            width: 80%;
+            margin-bottom: 50px;
+            padding: 20px;
+            background: #f8f8f8;
+            display: flex;
+            align-items: center; /* 요소 세로 정렬 */
+            justify-content: center; /* 중앙 정렬 */
+        }
+        .btn-container{
+            margin-top: 130px;
+            order:1;
+        }
+
+        .image-container {
+            flex: 0.2;
+            display: flex;
+            margin-right: 20px;
+            justify-content: flex-start;
+        }
+
+        .image-container img {
+            width: 270px;
+            height: 400px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+        }
+
+        .details {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            max-width: 1000px;
+            height: 400px;
+            gap: 10px;
+        }
+
+        .title {
+            font-family: Roboto, sans-serif;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .author-publisher {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            color: rgb(129, 129, 129);
+            margin-right: 10px;
+            padding-bottom: 8px; /* 밑줄과 내용 사이 간격 */
+            border-bottom: 1px solid #ccc; /* 회색 밑줄 */
+        }
+        .Date-star{
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            gap: 10px;
+            font-size: 15px;
+        }
+        .startDate, .endDate{
+            font-size: 15px;
+            font-weight: 600;
+        }
+        .star-rating {
+            display: flex;
+            align-items: center;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            font-size: 2em;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            color: #ddd;
+            cursor: pointer;
+            margin-bottom: 7px;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label,
+        .star-rating input:checked ~ label {
+            color: #ffc700;
+        }
+                /* Button Container */
+        .btn-container {
+            margin-top: 130px;
+            order: 1;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Common Button Styles */
+        .btn-container button {
+            background-color: #f8f8f8;
+            border: none;
+            border-right: 1px solid #dfdfdf;
+            color: #646464;
+            padding-right: 10px;
+            text-align: center;
+            display: inline-block;
+            font-size: 15px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        /* Hover Effect */
+        .btn-container button:hover {
+        }
+
+               /* 모달 배경 */
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: none;
+        }
+
+        /* 모달 콘텐츠 */
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            width: 800px;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 닫기 버튼 */
+        .close-btn {
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+       /* 텍스트 영역 */
+       textarea {
+            width: 95%;
+            height: 300px;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            resize: none; /* 크기 조절 비활성화 */
+            background-color: #f4f4f4;
+        }
+
+        textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        /* 저장 버튼 */
+        .save-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .save-btn:hover {
+            background-color: #45a049;
+        }
+
+        .memo-container {
+            flex: 1;
+            background-color: #ffffff;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-left: 50px;
+            height: 450px;
+            display: flex;
+            flex-direction: column;
+            position: relative; /* 버튼 고정을 위한 상대 위치 설정 */
+            padding-bottom: 50px; /* 버튼이 들어갈 공간 확보 */
+        }
+        .memo-section{
+            width : 90%;
+            padding: 15px;
+            height: 100%;
+            overflow-y: auto;
+        }
+        .memo-date{
+            max-width: 100%;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+
+        .memo-section p {
+            margin-top:6px;
+            width: fit-content;
+            padding: 6px 14px;
+            font-size: 14px;
+            color: #333;
+            word-wrap: break-word;
+            border-radius: 20px;
+            background-color: #edf6fe;
+            border: none;
+            height: auto; /* 자동 높이 */
+            max-height: none; /* 최대 높이 제한 해제 */
+            white-space: pre-wrap; /* 줄바꿈 유지 */
+        }
+
+        .memo-container button {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%; /* 버튼 너비 조정 */
+            max-width: 400px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .memo-section button:hover {
+            background-color: #45a049;
+        }
+        .memo-head{
+            padding: 5px 10px;
+            width: 100%;
+            background-color: #e9e9e9;
+            text-align: center;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+<div th:replace="~{nav :: navbar}"></div>
+
+<div class="container">
+    <div class="btn-container">
+
+        <form th:if="${book.bookStatus == T(com.book_service.personal_book_project.domain.BookStatus).READING}" th:action="@{/update-status}" method="post">
+            <input type="hidden" name="bookId" th:value="${book.id}"/>
+            <input type="hidden" name="status" value="DONE"/>
+            <button>다읽었어요</button>
+        </form>
+        <form th:if="${book.bookStatus == T(com.book_service.personal_book_project.domain.BookStatus).DONE}" th:action="@{/update-status}" method="post">
+            <input type="hidden" name="bookId" th:value="${book.id}"/>
+            <input type="hidden" name="status" value="READING"/>
+            <button>읽는중</button>
+        </form>
+        <form th:action="@{/remove-book}" method="post" onsubmit="return confirm('이 책을 서재에서 제거하시겠습니까?');">
+            <input type="hidden" name="bookId" th:value="${book.id}"/>
+            <button type="submit">내 서재에서 삭제하기</button>
+        </form>
+    </div>
+    <div class="item-container">
+        <!-- Left side: Image -->
+        <div class="image-container">
+            <img th:src="${book.cover}" alt="책 이미지">
+        </div>
+
+        <!-- Right side: Item Details -->
+        <div class="details">
+            <h1 class="title" th:text="${book.title}">책 제목</h1>
+            <div class="author-publisher">
+                <div class="author" th:text="${book.author}">저자</div>
+                <div class="publisher" th:text="${book.publisher}">출판사</div>
+            </div>
+            <div class="Date-star">
+                <div style="font-size: 15px; font-weight: bold;">나의 별점</div>
+                <div class="star-rating">
+                    <input type="radio" id="star5" name="rating" value="5" />
+                    <label for="star5" title="5 stars">★</label>
+                    <input type="radio" id="star4" name="rating" value="4" />
+                    <label for="star4" title="4 stars">★</label>
+                    <input type="radio" id="star3" name="rating" value="3" />
+                    <label for="star3" title="3 stars">★</label>
+                    <input type="radio" id="star2" name="rating" value="2" />
+                    <label for="star2" title="2 stars">★</label>
+                    <input type="radio" id="star1" name="rating" value="1" />
+                    <label for="star1" title="1 star">★</label>
+                </div>
+                <div style="font-size: 15px; font-weight: bold;">읽은 날짜</div>
+                <div style="font-size: 13px; ">시작</div>
+                <span class="startDate" th:text="${book.startDate}">시작 날짜</span>
+                <div style="font-size: 13px; ">종료</div>
+                <span class="endDate" th:text="${book.endDate != null ? book.endDate : '-'}">끝 날짜</span>
+            </div>
+
+            <div class="description" th:text="${book.description}">설명</div>
+        </div>
+
+        <!-- Memo Display Section -->
+        <div class="memo-container">
+            <div class="memo-head"><h1 style="font-size: 15px;">나의 메모</h1></div>
+            <div class="memo-section">
+                <div class="memo-date" th:each="memo : ${memoList}" >
+                    <div style="font-size:13px; font-weight:bold; color:#ccc; "  th:text="${#temporals.format(memo.saved, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                    <p  th:text="${memo.content}"></p>
+                </div>
+            </div>
+            <div class="memo-btn-wrapper">
+                <button id="openModal">메모 작성</button>
+            </div>
+        </div>
+        <!-- 모달창 -->
+        <div id="memoModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h3>메모 작성</h3>
+                <textarea id="memoText" placeholder="메모를 입력하세요..."></textarea>
+                <button class="save-btn">등록</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -140,7 +140,7 @@
         <div class="book-cards">
            <!--카드 반복 출력-->
             <div class="card" th:each="book : ${books}">
-                <a th:href="@{|/item/${book.isbn13}|}">
+                <a th:href="@{|/item/${book.isbn}|}">
                     <img th:src="${book.cover}" alt="책이미지" >
                 </a>
                 <div class="card-title" th:text="${book.title}">제목</div>

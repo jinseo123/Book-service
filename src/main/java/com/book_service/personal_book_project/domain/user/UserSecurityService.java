@@ -1,6 +1,7 @@
 package com.book_service.personal_book_project.domain.user;
 
 
+import com.book_service.personal_book_project.repository.BookRepository;
 import com.book_service.personal_book_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

@@ -20,16 +20,16 @@ public class DetailController {
     private final ItemService itemService;
     private final BookService bookService;
 
-    @GetMapping("/item/{isbn13}")
-    public String ItemDetail(@PathVariable("isbn13") String isbn13, Model model){
-        ItemDto response = itemService.getBookDetail(isbn13);
+    @GetMapping("/item/{isbn}")
+    public String ItemDetail(@PathVariable("isbn") String isbn, Model model){
+        ItemDto response = itemService.getBookDetail(isbn);
         log.info("*********************response : " + response);
         // 아이템이 존재할 때, 첫 번째 아이템만 전달 (List로 존재)
 
         model.addAttribute("item", response.getItem().get(0));  // 첫 번째 아이템을 추가
         return "item_detail";
     }
-    @PostMapping("/item/{isbn13}")
+    @PostMapping("/item/{isbn}")
     public ResponseEntity<String> save_Book(@ModelAttribute BookDto bookDto){
         log.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Bookdto:" + bookDto);
         boolean isSaved = bookService.saveBook(bookDto);
@@ -39,4 +39,7 @@ public class DetailController {
 
         return ResponseEntity.ok("책이 저장되었습니다.");
     }
+
+
+
 }

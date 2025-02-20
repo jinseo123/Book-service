@@ -164,6 +164,7 @@
             <input type="hidden" th:value="${item.cover}" name="cover"/>
             <input type="hidden" th:value="${item.author}" name="author"/>
             <input type="hidden" th:value="${item.publisher}" name="publisher"/>
+            <input type="hidden" th:value="${item.description}" name="description"/>
             <input type="hidden" value="READING" name="bookStatus"/>
             <input type="hidden" name="startDate" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"/>
             <input type="hidden" th:value="${item.isbn}" name="isbn"/>

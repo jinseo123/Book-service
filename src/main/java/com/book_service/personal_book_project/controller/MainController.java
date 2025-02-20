@@ -1,6 +1,8 @@
 package com.book_service.personal_book_project.controller;
 
 import com.book_service.personal_book_project.domain.user.UserCreateForm;
+import com.book_service.personal_book_project.dto.ItemDto;
+import com.book_service.personal_book_project.service.ItemService;
 import com.book_service.personal_book_project.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +25,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class MainController {
 
     private final UserService userService;
+    private final ItemService itemService;
 
     @GetMapping("/")
-    public String main(){
+    public String main(Model model){
+        ItemDto itemDto = itemService.getBestseller();
+        model.addAttribute("bestList", itemDto.getItem());
         return "main";
     }
 
@@ -78,4 +83,6 @@ public class MainController {
 
         return "로그인하지 않았습니다.";
     }
+
+
 }

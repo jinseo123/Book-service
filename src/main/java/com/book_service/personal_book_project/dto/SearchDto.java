@@ -27,7 +27,7 @@ public class SearchDto {
         public String cover; //커버이미지
         public String author;
         public String publisher;
-        public String isbn13;
+        public String isbn;
 //        public String description;
     }
 }

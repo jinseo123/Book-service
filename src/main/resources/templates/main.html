@@ -1,10 +1,169 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"><head>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top Navigation Bar</title>
-    <link rel="stylesheet" th:href="@{/css/nav.css}" href="nav.css" type="text/css"/></head>
+    <title>📚 베스트셀러</title>
+    <link rel="stylesheet" th:href="@{/css/nav.css}" href="nav.css" type="text/css"/>
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"/>
+
+    <style>
+        body{
+            margin-top:75px;
+        }
+        .bestseller-container {
+            width: 80%;
+            height: 400px;
+            margin: auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .swiper-container {
+            width: 100%;
+            height:auto;
+            position: relative;
+        }
+
+        .swiper-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .swiper-slide {
+            height: 320px; /* 책 표지 크기 설정 */-->
+            text-align: center;
+            background: #fff;
+        }
+
+        .book-cover {
+            width: 200px;  /* 책 표지 크기 설정 */
+            height: 300px; /* 책 표지 크기 설정 */
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .book-title {
+            width : 100%;
+            font-size: 15px;
+            font-weight: bold;
+            margin-top: 7px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .swiper-button-next:hover, .swiper-button-prev:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .navigation-wrapper {
+            position: absolute;
+            width: 80%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: 0.3s;
+            z-index: 10;
+        }
+        .swiper-pagination {
+            position: absolute;
+            bottom: 10px; /* 페이지네이션을 하단에 배치 */
+            width: 100%;
+            text-align: center;
+        }
+
+        /* 버튼 위치 조정 */
+        .swiper-button-prev {  left:-50px; }
+        .swiper-button-next {  right:-45px;}
+
+        /* 비활성화 상태 */
+        .swiper-button-disabled {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        .best-text{
+            text-align: left;
+            margin: 0;
+            margin-bottom: 5px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
 <div th:replace="~{nav :: navbar}"></div>
+<!-- 베스트셀러 전용 컨테이너 -->
+<div class="navigation-wrapper">
+    <!-- 화살표 -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+</div>
+
+<div class="bestseller-container">
+    <h2 class="best-text">📚 베스트셀러 순위</h2>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" th:each="best : ${bestList}">
+                <img th:src="${best.cover}" alt="책 표지" class="book-cover"/>
+                <p class="book-title" th:text="${best.title}"></p>
+            </div>
+        </div>
+
+        <!-- 페이지네이션 -->
+    </div>
+    <div class="swiper-pagination"></div>
+</div>
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        slidesPerView: 7,   // 한 번에 5개 표시
+        slidesPerGroup: 7,  // 한 번에 5개씩 이동
+        spaceBetween: 20,   // 카드 간 간격
+        loop: false,        // 무한 루프 비활성화
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        on: {
+            init: function () {
+                updateNavButtons(this);
+            },
+            slideChange: function () {
+                updateNavButtons(this);
+            }
+        }
+    });
+
+    function updateNavButtons(swiper) {
+        let prevBtn = document.querySelector('.swiper-button-prev');
+        let nextBtn = document.querySelector('.swiper-button-next');
+
+        if (swiper.isBeginning) {
+            prevBtn.classList.add('swiper-button-disabled');
+        } else {
+            prevBtn.classList.remove('swiper-button-disabled');
+        }
+
+        if (swiper.isEnd) {
+            nextBtn.classList.add('swiper-button-disabled');
+        } else {
+            nextBtn.classList.remove('swiper-button-disabled');
+        }
+    }
+</script>
+</body>
 
 </html>
