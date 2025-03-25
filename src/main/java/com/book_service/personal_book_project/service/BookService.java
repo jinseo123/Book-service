@@ -40,6 +40,7 @@ public class BookService {
                 .user(currentUser)
                 .build();
         bookRepository.save(book);
+        System.out.println("ddd");
         return true; // 저장 성공
     }
     private Users getCurrentUser(){
